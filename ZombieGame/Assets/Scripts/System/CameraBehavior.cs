@@ -44,7 +44,7 @@ public class CameraBehavior : MonoBehaviour {
         }
 
         //Set Transform Position to Camera Lerp
-        transform.position = new Vector3(Mathf.Round(start_position.x - (start_position.x % 0.03125f)), Mathf.Round(start_position.y - (start_position.y % 0.03125f)), transform.position.z);
+        transform.position = new Vector3(start_position.x - (start_position.x % 0.03125f), start_position.y - (start_position.y % 0.03125f), transform.position.z);
 	}
 
     //Public Functions
