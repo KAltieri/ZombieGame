@@ -11,12 +11,14 @@ public class PlayerBehavior : MonoBehaviour {
     private Animator anim;
 
     private bool can_move;
-    private float gravity;
-    private float jump;
     private float jump_force;
     private Vector2 velocity;
 
     private float spd;
+    private float jump;
+    private float gravity;
+
+    private DoorBehavior door;
 
 	//Init Event
 	void Awake () {
@@ -36,6 +38,8 @@ public class PlayerBehavior : MonoBehaviour {
         can_move = true;
         jump_force = 0f;
         velocity = Vector2.zero;
+
+        door = null;
 	}
 	
 	//Update Event
@@ -48,7 +52,13 @@ public class PlayerBehavior : MonoBehaviour {
         if (can_move){
             //Jump
             if (controls[4]){
-                jump_force = jump;
+                if (door != null){
+                    transform.position = door.findDoor();
+                    door = null;
+                }
+                else {
+                    jump_force = jump;
+                }
             }
 
             //Move Left and Right
@@ -73,6 +83,19 @@ public class PlayerBehavior : MonoBehaviour {
         }
         rb.velocity = new Vector2(velocity.x, velocity.y + jump_force);
         jump_force = 0;
+    }
+
+    //Collisions
+    void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.gameObject.tag == "Door"){
+            door = collision.gameObject.GetComponent<DoorBehavior>();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collision) {
+        if (collision.gameObject.tag == "Door"){
+            door = null;
+        }
     }
 
     //Public Methods
@@ -121,6 +144,15 @@ public class PlayerBehavior : MonoBehaviour {
             controls[4] = true;
         }
         return controls;
+    }
+
+    /// <summary>
+    /// canmove: returns if the player can move
+    /// </summary>
+    public bool canmove {
+        get {
+            return can_move;
+        }
     }
 
     /// <summary>

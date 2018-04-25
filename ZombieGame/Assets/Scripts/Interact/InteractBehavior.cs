@@ -6,16 +6,19 @@ using UnityEngine;
 public class InteractBehavior : InteractInterface {
 
     //Settings
-    private SpriteRenderer sr;
+    protected SpriteRenderer sr;
     private SpriteOutline sprout;
-    private Collider2D col;
+    protected Collider2D col;
+
+    protected bool selected;
+    private float alpha;
 
     //Internals
     protected void Start() {
+        selected = false;
         sr = GetComponent<SpriteRenderer>();
         sr.material = Resources.Load("Materials/PixelPerfectOutline") as Material;
         sprout = gameObject.AddComponent<SpriteOutline>();
-        sprout.OutlineColor = new Color(1, 1, 1, 0);
         col = GetComponent<Collider2D>();
         gameObject.AddComponent<PixelSnap>();
         init();
@@ -27,11 +30,29 @@ public class InteractBehavior : InteractInterface {
 
     //Initialization & Update Methods
     protected override void init() {
-
+        alpha = 0;
+        sprout.OutlineColor = new Color(1, 1, 1, 0);
     }
 
     protected override void step() {
+        selected = false;
+        PlayerBehavior player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehavior>();
 
+        bool alpha_drop = true;
+        if (player.canmove){
+            if (col.bounds.Contains(new Vector3(player.getCursorPosition().x, player.getCursorPosition().y, transform.position.z))){
+                alpha = Mathf.Lerp(alpha, 1, Time.deltaTime * 0.5f);
+                alpha_drop = false;
+                selected = true;
+            }
+        }
+
+        if (alpha_drop){
+            alpha = Mathf.Lerp(alpha, 0, Time.deltaTime * 0.5f);
+        }
+
+        alpha = Mathf.Clamp(alpha, 0, 1);
+        sprout.OutlineColor = new Color(1, 1, 1, alpha);
     }
 
 }
