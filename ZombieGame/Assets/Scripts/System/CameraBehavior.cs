@@ -14,18 +14,21 @@ public class CameraBehavior : MonoBehaviour {
     private float screenshakedelay;
     private Vector2 screen_shake_pos;
 
+	private GameObject player;
+
     //Init Event
 	void Start () {
 		start_position = transform.position;
         start_position = end_position;
+		player = GameObject.FindGameObjectWithTag("Player");
 
         screenshaketime = 0f;
 	}
-	
+
 	//Update Event
 	void FixedUpdate () {
         //Lerp Camera
-        end_position = new Vector2(GameObject.FindGameObjectWithTag("Player").transform.position.x, LevelManager.instance.getLevelY(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehavior>().level));
+        end_position = new Vector2(player.transform.position.x, LevelManager.instance.getLevelY(player.GetComponent<PlayerBehavior>().level));
         start_position = new Vector2(Mathf.Lerp(start_position.x, end_position.x, Time.deltaTime * spd), Mathf.Lerp(start_position.y, end_position.y, Time.deltaTime * spd));
         transform.localEulerAngles = new Vector3(0f, 0f, 0f);
 
