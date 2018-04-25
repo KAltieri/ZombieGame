@@ -7,6 +7,7 @@ public class DoorBehavior : InteractBehavior {
 	//Settings
     [SerializeField] private int id;
 
+    private bool goes_up;
     private int levelnum;
 
     //Init & Update Events
@@ -15,8 +16,15 @@ public class DoorBehavior : InteractBehavior {
         gameObject.tag = "Door";
         col = gameObject.AddComponent<BoxCollider2D>();
         col.isTrigger = true;
+        Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
+        rb.freezeRotation = true;
+        rb.gravityScale = 0;
 
         levelnum = LevelManager.instance.getLevelNum(transform.position.y);
+
+        if (findDoor().y > transform.position.y){
+            goes_up = true;
+        }
 
         base.init();
 	}
@@ -44,6 +52,12 @@ public class DoorBehavior : InteractBehavior {
             }
         }
         return return_v2;
+    }
+
+    public bool up {
+        get {
+            return goes_up;
+        }
     }
 
     public int door_id {
