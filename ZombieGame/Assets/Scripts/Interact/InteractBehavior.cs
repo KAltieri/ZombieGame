@@ -41,18 +41,18 @@ public class InteractBehavior : InteractInterface {
         bool alpha_drop = true;
         if (player.canmove){
             if (col.bounds.Contains(new Vector3(player.getCursorPosition().x, player.getCursorPosition().y, transform.position.z))){
-                alpha = Mathf.Lerp(alpha, 1, Time.deltaTime * 0.5f);
+                alpha = Mathf.Lerp(alpha, 1, Time.deltaTime * 5f);
                 alpha_drop = false;
                 selected = true;
             }
         }
 
         if (alpha_drop){
-            alpha = Mathf.Lerp(alpha, 0, Time.deltaTime * 0.5f);
+            alpha = Mathf.Lerp(alpha, 0, Time.deltaTime * 5f);
         }
 
         alpha = Mathf.Clamp(alpha, 0, 1);
-        sprout.OutlineColor = new Color(1, 1, 1, alpha);
+        sprout.OutlineColor = new Color(1, 1, 1, alpha * 0.8f);
     }
 
 }

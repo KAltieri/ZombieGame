@@ -31,8 +31,8 @@ public class PlayerBehavior : MonoBehaviour {
 
         //Settings
         spd = 10f;
-        jump = 10f;
-        gravity = 1f;
+        jump = 3500f;
+        gravity = 150f;
 
         //Variables
         can_move = true;
@@ -48,7 +48,6 @@ public class PlayerBehavior : MonoBehaviour {
 
         //Movement
         velocity.x = 0f;
-        velocity.y = rb.velocity.y;
         if (can_move){
             //Jump
             if (controls[4]){
@@ -76,13 +75,21 @@ public class PlayerBehavior : MonoBehaviour {
     //Fixed Update
     void FixedUpdate () {
         if (jump_force > 0){
-            velocity.y = 0;
+            velocity.y = jump_force;
+            jump_force = 0;
         }
         else {
             velocity.y -= gravity;
+            if (velocity.y < 0){
+                velocity.y *= 1.15f;
+            }
+            else {
+                velocity.y *= 0.85f;
+            }
+            velocity.y = Mathf.Clamp(velocity.y, -4000f, velocity.y);
         }
-        rb.velocity = new Vector2(velocity.x, velocity.y + jump_force);
-        jump_force = 0;
+        rb.velocity = new Vector2(velocity.x, 0f);
+        rb.AddForce(new Vector2(0, velocity.y));
     }
 
     //Collisions
