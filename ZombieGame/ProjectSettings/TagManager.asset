@@ -8,6 +8,7 @@ TagManager:
   - Zombie
   - Weapon
   - Door
+  - Floor
   layers:
   - Default
   - TransparentFX

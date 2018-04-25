@@ -16,7 +16,12 @@ public class PlayerBehavior : MonoBehaviour {
 
     private float spd;
     private float jump;
+	private bool canJump;
     private float gravity;
+
+	private float doorTimer = -2f;
+	[SerializeField] private float doorWait;
+	private bool stop;
 
     private DoorBehavior door;
 
@@ -45,18 +50,26 @@ public class PlayerBehavior : MonoBehaviour {
 	//Update Event
 	void Update () {
 		bool[] controls = getControls();
-
+		if (doorTimer != -2f) {
+			doorTimer -= Time.time;
+		}
         //Movement
         velocity.x = 0f;
         if (can_move){
             //Jump
             if (controls[4]){
-                if (door != null){
+				if (doorTimer < 0 && doorTimer != -2f && !stop){
                     transform.position = door.findDoor();
+					doorTimer = -2f;
                     door = null;
+					stop = true;
                 }
                 else {
-                    jump_force = jump;
+					if (canJump) {
+						jump_force = jump;
+						canJump = false;
+					}
+
                 }
             }
 
@@ -96,14 +109,26 @@ public class PlayerBehavior : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.tag == "Door"){
             door = collision.gameObject.GetComponent<DoorBehavior>();
+			doorTimer = Time.time + doorWait;
+			stop = false;
         }
     }
 
     void OnTriggerExit2D(Collider2D collision) {
         if (collision.gameObject.tag == "Door"){
             door = null;
+			doorTimer = -2f;
+			stop = true;
         }
     }
+
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		if(collision.gameObject.tag == "Floor")
+		{
+			canJump = true;
+		}
+	}
 
     //Public Methods
     /// <summary>
