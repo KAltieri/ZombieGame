@@ -28,6 +28,10 @@ public class DoorBehavior : InteractBehavior {
 	}
 
     //Public Methods
+    /// <summary>
+    /// findDoor(): returns the Vector2 position of the other door that matches the id of this door
+    /// </summary>
+    /// <returns></returns>
     public Vector2 findDoor() {
         GameObject[] search = GameObject.FindGameObjectsWithTag("Door");
         Vector2 return_v2 = Vector2.zero;
