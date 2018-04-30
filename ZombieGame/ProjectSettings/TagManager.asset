@@ -9,6 +9,7 @@ TagManager:
   - Weapon
   - Door
   - Floor
+  - Spawn
   layers:
   - Default
   - TransparentFX

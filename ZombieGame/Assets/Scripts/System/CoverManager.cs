@@ -17,7 +17,6 @@ public class CoverManager : MonoBehaviour {
 	void Update () {
 		if(count > 0)
 		{
-			Debug.Log (transform.GetChild (count));
 			Color temp = transform.GetChild (count).GetComponent<SpriteRenderer> ().color;
 			temp.a -= reduction;
 			transform.GetChild (count).GetComponent<SpriteRenderer> ().color = temp;
