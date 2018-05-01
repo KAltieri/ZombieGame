@@ -9,6 +9,8 @@ TagManager:
   - Weapon
   - Door
   - Floor
+  - Corpse
+  - Spawn
   layers:
   - Default
   - TransparentFX
@@ -18,11 +20,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - NPCs
+  - Weapons
+  - Projectiles
+  - Props
   - 
   - 
   - 

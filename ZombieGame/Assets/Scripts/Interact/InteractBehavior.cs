@@ -7,7 +7,7 @@ public class InteractBehavior : InteractInterface {
 
     //Settings
     protected SpriteRenderer sr;
-    private SpriteOutline sprout;
+    protected SpriteOutline sprout;
     protected Collider2D col;
 
     protected bool selected;
@@ -53,6 +53,10 @@ public class InteractBehavior : InteractInterface {
 
         alpha = Mathf.Clamp(alpha, 0, 1);
         sprout.OutlineColor = new Color(1, 1, 1, alpha * 0.8f);
+    }
+
+    protected override void use() {
+
     }
 
 }

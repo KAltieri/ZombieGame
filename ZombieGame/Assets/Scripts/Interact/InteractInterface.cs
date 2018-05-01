@@ -6,5 +6,6 @@ public abstract class InteractInterface : MonoBehaviour {
 
 	protected abstract void init();
     protected abstract void step();
+    protected abstract void use();
 
 }
