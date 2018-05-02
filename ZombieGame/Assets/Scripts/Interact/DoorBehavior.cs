@@ -6,9 +6,7 @@ public class DoorBehavior : InteractBehavior {
 
 	//Settings
     [SerializeField] private int id;
-
     private bool goes_up;
-    private int levelnum;
 
     //Init & Update Events
 	protected override void init () {
@@ -20,11 +18,10 @@ public class DoorBehavior : InteractBehavior {
         rb.freezeRotation = true;
         rb.gravityScale = 0;
 
-        levelnum = LevelManager.instance.getLevelNum(transform.position.y);
-
         if (findDoor().y > transform.position.y){
             goes_up = true;
         }
+        transform.position = new Vector3(transform.position.x, transform.position.y, 9);
 
         base.init();
 	}

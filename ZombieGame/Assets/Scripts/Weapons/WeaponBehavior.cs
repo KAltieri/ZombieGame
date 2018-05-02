@@ -12,7 +12,7 @@ public class WeaponBehavior : InteractBehavior {
     protected bool player;
     protected Rigidbody2D rb;
     [SerializeField] protected string weapon_name = "Weapon_Name";
-    [SerializeField] protected bool meele = false;
+    [SerializeField] protected bool meele = true;
     [SerializeField] protected float meele_damage = 0.25f;
 
     [SerializeField] protected float spd = 5f;

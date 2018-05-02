@@ -7,7 +7,6 @@ public class TrailEffectScript : MonoBehaviour {
 
 	//Settings
     private int delay;
-    private float shrink;
     private GameObject trail_main;
     private GameObject[] trail;
 
@@ -39,7 +38,6 @@ public class TrailEffectScript : MonoBehaviour {
 
     public void setEffect(int trail_length, float shrink_multiplier){
         trail = new GameObject[trail_length];
-        shrink = shrink_multiplier;
 
         float alpha = 1f;
         GameObject trail_effect_main = new GameObject("trail_effect");

@@ -5,16 +5,7 @@ using UnityEngine;
 public class BulletScript : MonoBehaviour {
 
     //Settings
-    private Vector2 size;
-    private bool delay;
-    private Vector2 previous_pos;
     private float damage_val;
-
-    void Start() {
-        size = GetComponent<BoxCollider2D>().size;
-        delay = true;
-        previous_pos = transform.position;
-    }
 
     void Update () {
         GameObject[] NPCs = GameObject.FindGameObjectsWithTag("Zombie");

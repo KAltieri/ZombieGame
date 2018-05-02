@@ -13,6 +13,11 @@ public class LevelManager : MonoBehaviour {
         getinstance = gameObject.GetComponent<LevelManager>();
     }
 
+    //Update
+    void LateUpdate() {
+        
+    }
+
     //Public Methods
     /// <summary>
     /// getLevelY(): returns the level y position of the level argument

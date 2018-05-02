@@ -11,6 +11,8 @@ public class PlayerBehavior : MonoBehaviour {
     private Animator anim;
 
     private bool can_move;
+    private bool evac;
+    private int evac_humans;
     private float jump_force;
     private Vector2 velocity;
 
@@ -42,7 +44,9 @@ public class PlayerBehavior : MonoBehaviour {
         gravity = 150f;
 
         //Variables
-        can_move = true;
+        can_move = false;
+        evac = false;
+        evac_humans = 0;
         jump_force = 0f;
         velocity = Vector2.zero;
 
@@ -71,6 +75,13 @@ public class PlayerBehavior : MonoBehaviour {
 	//Update Event
 	void Update () {
 		bool[] controls = getControls();
+
+        //Evac
+        if (evac){
+            velocity.x = 0f;
+            sr.enabled = false;
+            return;
+        }
 
         //Dead
         if (dead){
@@ -197,8 +208,8 @@ public class PlayerBehavior : MonoBehaviour {
             }
         }
 
-        if (dead){
-            anim.Play("player_dead");
+        if (transform.position.y < -10){
+            kill();
         }
 	}
 
@@ -243,6 +254,21 @@ public class PlayerBehavior : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.tag == "Door"){
             door = collision.gameObject.GetComponent<DoorBehavior>();
+        }
+        if (collision.gameObject.tag == "Evac"){
+            if (!dead){
+                evac = true;
+                can_move = false;
+                Camera.main.GetComponent<CameraBehavior>().createMenu("victory");
+                if (weapon != null) {
+                    weapon.dropWeapon();
+                    weapon = null;
+                }
+                if (evac_humans > PlayerPrefs.GetInt("highscore")){
+                    PlayerPrefs.SetInt("highscore", evac_humans);
+                    PlayerPrefs.Save();
+                }
+            }
         }
     }
 
@@ -323,11 +349,30 @@ public class PlayerBehavior : MonoBehaviour {
     }
 
     public void kill() {
-        dead = true;
-        can_move = false;
-        if (weapon != null){
-            weapon.dropWeapon();
+        if (!evac){
+            if (!dead){
+                dead = true;
+                can_move = false;
+                if (weapon != null){
+                    weapon.dropWeapon();
+                }
+                Camera.main.GetComponent<CameraBehavior>().createMenu("gameover");
+            }
         }
+    }
+
+    public void evacHuman() {
+        if (!dead) {
+            evac_humans++;
+        }
+    }
+
+    public int getEvacHumanCount() {
+        return evac_humans;
+    }
+
+    public void startGame() {
+        can_move = true;
     }
 
     public void setWeapon(WeaponBehavior new_weapon){

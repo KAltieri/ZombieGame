@@ -8,7 +8,6 @@ public class AIScript : InteractBehavior {
     private Animator anim;
 
     [SerializeField] private bool zombie;
-    [SerializeField] private string behavior;
     private bool canmove;
     private CorpseBehavior eat;
     private bool dead;
@@ -37,6 +36,10 @@ public class AIScript : InteractBehavior {
         else {
             gameObject.tag = "Human";
 
+            if (spd == 0.005f){
+                spd = Random.Range(0.015f, 0.04f);
+            }
+
             human_timer = 160;
             BoxCollider2D box_col = GetComponent<BoxCollider2D>();
             if (box_col == null){
@@ -56,6 +59,13 @@ public class AIScript : InteractBehavior {
             human_rb.gravityScale = 0;
             human_rb.freezeRotation = true;
         }
+
+        if (Random.Range(0, 2) == 0){
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
     }
 
     protected override void init() {
@@ -63,7 +73,6 @@ public class AIScript : InteractBehavior {
         
         anim = GetComponent<Animator>();
 
-        behavior = "normal";
         canmove = true;
         eat = null;
         dead = false;
@@ -76,6 +85,8 @@ public class AIScript : InteractBehavior {
 
         human_color = new Color(Random.Range(30f, 80f) / 255f, Random.Range(180f, 90f) / 255f, 200f / 255f, 1f);
         human_bite = null;
+
+        step();
     }
 
     //Update
@@ -98,6 +109,7 @@ public class AIScript : InteractBehavior {
         //Zombify
         if (zombie){
             if (human_bite != null){
+                human_bite.zombify();
                 anim.Play("zombie_idle");
                 if (human_bite.isZombie){
                     human_bite = null;
@@ -107,17 +119,15 @@ public class AIScript : InteractBehavior {
         }
         else {
             if (human_timer < 160){
-                if (human_timer > 0){
-                    human_timer--;
+                human_timer--;
 
-                    anim.Play("human_idle");
-                    sr.color = Color.Lerp(human_color, new Color(75f / 255f, 105f / 255f, 47f / 255f, 1f), (160 - human_timer) / 160f);
-                    if (human_timer == 0){
-                        zombie = true;
-                        gameObject.tag = "Zombie";
-                    }
-                    return;
+                anim.Play("human_idle");
+                sr.color = Color.Lerp(human_color, new Color(75f / 255f, 105f / 255f, 47f / 255f, 1f), (160 - human_timer) / 160f);
+                if (human_timer <= 0){
+                    zombie = true;
+                    gameObject.tag = "Zombie";
                 }
+                return;
             }
         }
 
@@ -225,7 +235,7 @@ public class AIScript : InteractBehavior {
                 }
             }
             else {
-                //Move towards Door or Humans or Corpses
+                //Move towards Door
                 if (!door_found){
                     GameObject[] doors = GameObject.FindGameObjectsWithTag("Door");
                     List<DoorBehavior> up_doors = new List<DoorBehavior>();
@@ -242,6 +252,10 @@ public class AIScript : InteractBehavior {
                         door_found = true;
                         door = up_doors[Random.Range(0, up_doors.Count)];
                     }
+                    else {
+                        GameObject evac_zone = GameObject.FindGameObjectWithTag("Evac");
+                        target_pos = evac_zone.transform.position;
+                    }
                 }
                 else {
                     target_pos = new Vector2(door.transform.position.x, door.transform.position.y);
@@ -255,6 +269,13 @@ public class AIScript : InteractBehavior {
                     door_move = false;
                     door_found = false;
                     door = null;
+                }
+
+                //Idle if no zombies exist
+                if (GameObject.FindGameObjectWithTag("Zombie") == null) {
+                    target_pos.x = transform.position.x;
+                    velocity.x = 0f;
+                    anim.Play("human_idle");
                 }
             }
 
@@ -328,6 +349,12 @@ public class AIScript : InteractBehavior {
                 }
             }
         }
+        else {
+            if (collision.gameObject.tag == "Evac"){
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehavior>().evacHuman();
+                Destroy(gameObject);
+            }
+        }
     }
 
     void OnTriggerExit2D(Collider2D collision) {
@@ -377,19 +404,6 @@ public class AIScript : InteractBehavior {
     public bool isZombie {
         get {
             return zombie;
-        }
-    }
-
-    //Debug
-    void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-
-        Vector2 draw_pos = new Vector2(transform.position.x + (Mathf.Cos(0) * aware_r), transform.position.y + (Mathf.Sin(0) * aware_r));
-        for (int i = 15; i <= 360; i += 15){
-            float draw_rad = i * Mathf.Deg2Rad;
-            Vector2 new_pos = new Vector2(transform.position.x + (Mathf.Cos(draw_rad) * aware_r), transform.position.y + (Mathf.Sin(draw_rad) * aware_r));
-            Gizmos.DrawLine(new Vector3(draw_pos.x, draw_pos.y, transform.position.z), new Vector3(new_pos.x, new_pos.y, transform.position.z));
-            draw_pos = new_pos;
         }
     }
 
