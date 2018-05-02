@@ -97,9 +97,9 @@ MonoBehaviour:
   ammo: 4
   bullet_num: 3
   bullet_spread: 2
-  bullet_force: 2200
+  bullet_force: 1400
   bullet_screen_shake_time: 0.3
-  bullet_screen_shake_force: 1.5
+  bullet_screen_shake_force: 0.9
   bullet_damage: 1
   bullet_sprite: {fileID: 21300000, guid: 8495cae3f019d184690fe0f1dbcf89c1, type: 3}
   bulletUI_sprite: {fileID: 21300000, guid: 11bd96a4cf3a1314bbcd1d34ed611682, type: 3}

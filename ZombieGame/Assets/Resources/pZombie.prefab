@@ -66,7 +66,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.75}
+  m_Size: {x: 0.35, y: 0.75}
   m_EdgeRadius: 0
 --- !u!95 &95563652259711530
 Animator:
@@ -97,7 +97,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zombie: 1
-  behavior: normal
   spd: 0.005
 --- !u!212 &212187593917029780
 SpriteRenderer:

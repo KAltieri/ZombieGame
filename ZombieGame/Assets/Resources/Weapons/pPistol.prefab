@@ -95,7 +95,7 @@ MonoBehaviour:
   ammo: 7
   bullet_num: 1
   bullet_spread: 2
-  bullet_force: 1900
+  bullet_force: 1400
   bullet_screen_shake_time: 0.8
   bullet_screen_shake_force: 0.15
   bullet_damage: 0.35

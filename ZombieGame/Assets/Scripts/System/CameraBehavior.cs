@@ -61,7 +61,7 @@ public class CameraBehavior : MonoBehaviour {
 	}
 
 	//Update Event
-	void Update () {
+	void FixedUpdate () {
         //Lerp Camera
         end_position = new Vector2(player.transform.position.x, LevelManager.instance.getLevelY(player.GetComponent<PlayerBehavior>().level) + 1f);
         start_position = new Vector2(Mathf.Lerp(start_position.x, end_position.x, Time.deltaTime * spd), Mathf.Lerp(start_position.y, end_position.y, Time.deltaTime * spd));

@@ -54,7 +54,7 @@ public class GunBehavior : WeaponBehavior {
         for (int i = 0; i < bullet_num; i++){
             GameObject bullet = new GameObject(weapon_name + "_bullet");
             bullet.gameObject.layer = 11;
-            bullet.transform.position = transform.position;
+            bullet.transform.position = new Vector3(transform.position.x + (Mathf.Cos(use_angle) * 0.05f), transform.position.y + (Mathf.Sin(use_angle) * 0.05f), transform.position.z);
             bullet.AddComponent<SpriteRenderer>();
             bullet.GetComponent<SpriteRenderer>().sprite = bullet_sprite;
             bullet.AddComponent<Rigidbody2D>();

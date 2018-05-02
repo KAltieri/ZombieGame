@@ -1,4 +1,4 @@
-OSXStandalone
+WebGL
 SceneListBegin?
 Assets/Level.unity
 SceneListEnd?
