@@ -21,6 +21,8 @@ public class AIScript : InteractBehavior {
     private int human_timer;
     private AIScript human_bite;
 
+    private AudioSource aus;
+
     private bool door_found;
     private bool door_move;
     private DoorBehavior door;
@@ -86,12 +88,17 @@ public class AIScript : InteractBehavior {
         human_color = new Color(Random.Range(30f, 80f) / 255f, Random.Range(180f, 90f) / 255f, 200f / 255f, 1f);
         human_bite = null;
 
+        aus = gameObject.AddComponent<AudioSource>();
+
         step();
     }
 
     //Update
     protected override void step() {
         base.step();
+
+        //Sound
+        aus.volume = LevelManager.instance.getVolume() * 0.15f;
 
         //Dead
         if (dead){
@@ -135,6 +142,10 @@ public class AIScript : InteractBehavior {
         if (eat != null){
             eat.eat();
 
+            if (aus.clip != (AudioClip) Resources.Load("SFX/ZombieEatSFX")) {
+                aus.clip = (AudioClip) Resources.Load("SFX/ZombieEatSFX");
+                aus.Play();
+            }
             anim.Play("zombie_eat");
             return;
         }
@@ -187,6 +198,10 @@ public class AIScript : InteractBehavior {
                 }
 
                 if (Vector2.Distance(player.transform.position, transform.position) < 0.2f){
+                    if (aus.clip != (AudioClip) Resources.Load("SFX/ZombieEatSFX")) {
+                        aus.clip = (AudioClip) Resources.Load("SFX/ZombieEatSFX");
+                        aus.Play();
+                    }
                     anim.Play("zombie_eat");
                     return;
                 }

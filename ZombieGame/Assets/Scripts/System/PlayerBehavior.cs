@@ -105,6 +105,7 @@ public class PlayerBehavior : MonoBehaviour {
                 }
                 else {
 					if (canJump) {
+                        LevelManager.instance.playMusic("JumpSFX");
 						jump_force = jump;
 						canJump = false;
 					}
@@ -260,6 +261,7 @@ public class PlayerBehavior : MonoBehaviour {
                 evac = true;
                 can_move = false;
                 Camera.main.GetComponent<CameraBehavior>().createMenu("victory");
+                LevelManager.instance.playMusicLoop("EvacMusicSFX");
                 if (weapon != null) {
                     weapon.dropWeapon();
                     weapon = null;

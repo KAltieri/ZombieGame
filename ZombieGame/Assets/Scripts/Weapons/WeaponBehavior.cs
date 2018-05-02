@@ -126,7 +126,7 @@ public class WeaponBehavior : InteractBehavior {
         if (ammo == 0){
             return;
         }
-        else if (ammo > 0){
+        if (ammo > 0){
             ammo--;
         }
         timer = cooldown;
@@ -140,6 +140,21 @@ public class WeaponBehavior : InteractBehavior {
                 for (int i = transform.childCount - 1; i >= 0; i--){
                     Destroy(transform.GetChild(i).gameObject);
                 }
+            }
+
+            //SFX
+            string sfx_name = "MetalHit1SFX";
+            if (weapon_name == "Computer") {
+                sfx_name = "MetalHit2SFX";
+            }
+            else if (weapon_name == "Crowbar") {
+                sfx_name = "MetalHit1SFX";
+            }
+            else if (weapon_name == "Hammer") {
+                sfx_name = "MetalHit3SFX";
+            }
+            else if (weapon_name == "Stapler") {
+                sfx_name = "MetalHit1SFX";
             }
 
             GameObject hitbox = new GameObject("hitbox");
@@ -156,6 +171,7 @@ public class WeaponBehavior : InteractBehavior {
             hitbox.transform.parent = transform;
             hitbox.AddComponent<MeeleHitBox>().damage = meele_damage;
             hitbox.GetComponent<MeeleHitBox>().velocity = velocity;
+            hitbox.GetComponent<MeeleHitBox>().sfx = sfx_name;
         }
     }
 
@@ -233,10 +249,13 @@ public class WeaponBehavior : InteractBehavior {
 
     public bool canuse {
         get {
-            if (ammo == 0){
+            if (timer > 0){
                 return false;
             }
-            if (timer > 0){
+            if (ammo == 0){
+                if (!meele) {
+                    LevelManager.instance.playMusic("EmptyGunSFX");
+                }
                 return false;
             }
             return true;
@@ -251,6 +270,7 @@ public class MeeleHitBox : MonoBehaviour {
     private float timer;
     private float damage_val;
     private Vector2 kvelocity;
+    private string sfx_name;
 
     void Start() {
         timer = 8;
@@ -274,10 +294,12 @@ public class MeeleHitBox : MonoBehaviour {
             }
 
             collision.gameObject.GetComponent<AIScript>().damage(damage_val);
+            LevelManager.instance.playMusic(sfx_name);
             Destroy(gameObject);
         }
         else if (collision.gameObject.tag == "Human"){
             collision.gameObject.GetComponent<AIScript>().damage(5);
+            LevelManager.instance.playMusic(sfx_name);
             Destroy(gameObject);
         }
     }
@@ -291,6 +313,12 @@ public class MeeleHitBox : MonoBehaviour {
     public Vector2 velocity {
         set {
             kvelocity = value;
+        }
+    }
+
+    public string sfx {
+        set {
+            sfx_name = value;
         }
     }
 

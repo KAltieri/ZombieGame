@@ -33,6 +33,23 @@ public class GunBehavior : WeaponBehavior {
     protected override void use(){
         base.use();
 
+        //SFX
+        if (weapon_name == "SMG") {
+            int sfx_num = Random.Range(1, 6);
+            LevelManager.instance.playMusic("SMG" + sfx_num + "SFX");
+        }
+        else if (weapon_name == "Rifle"){
+            LevelManager.instance.playMusic("RifleSFX");
+            LevelManager.instance.playMusic("ShotgunSFX");
+            LevelManager.instance.playMusic("PistolSFX");
+        }
+        else if (weapon_name == "Pistol"){
+            LevelManager.instance.playMusic("PistolSFX");
+        }
+        else if (weapon_name == "Shotgun"){
+            LevelManager.instance.playMusic("ShotgunSFX");
+        }
+
         Camera.main.GetComponent<CameraBehavior>().bulletUI.setUI(ammo, bulletUI_sprite);
         for (int i = 0; i < bullet_num; i++){
             GameObject bullet = new GameObject(weapon_name + "_bullet");

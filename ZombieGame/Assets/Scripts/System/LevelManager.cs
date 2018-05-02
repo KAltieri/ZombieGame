@@ -8,14 +8,43 @@ public class LevelManager : MonoBehaviour {
     private static LevelManager getinstance;
     [SerializeField] private float[] levels;
 
+    private float volume;
+    private AudioSource mus_loop;
+    private List<AudioSource> mus;
+    private int bark_timer;
+
     //Init
     void Awake() {
         getinstance = gameObject.GetComponent<LevelManager>();
+
+        volume = 0.7f;
+        mus = new List<AudioSource>();
+        mus_loop = gameObject.AddComponent<AudioSource>();
+        bark_timer = 500;
     }
 
     //Update
     void LateUpdate() {
-        
+        if (!mus_loop.loop) {
+            bark_timer--;
+            if (bark_timer <= 0) {
+                mus_loop.clip = (AudioClip) Resources.Load("SFX/ZombieBarkSFX");
+                mus_loop.Play();
+                bark_timer = Random.Range(120, 380);
+            }
+        }
+
+        mus_loop.volume = volume * 0.15f;
+        if (mus.Count > 0){
+            for (int i = mus.Count - 1; i >= 0; i--){
+                mus[i].volume = volume;
+                if (!mus[i].isPlaying){
+                    AudioSource aud = mus[i];
+                    mus.Remove(aud);
+                    Destroy(aud);
+                }
+            }
+        }
     }
 
     //Public Methods
@@ -37,6 +66,25 @@ public class LevelManager : MonoBehaviour {
             }
         }
         return return_num;
+    }
+
+    public void playMusic(string sfx_name) {
+        AudioSource aud = gameObject.AddComponent<AudioSource>();
+        aud.clip = (AudioClip) Resources.Load("SFX/" + sfx_name);
+        aud.volume = volume;
+        mus.Add(aud);
+        aud.Play();
+    }
+
+    public void playMusicLoop(string sfx_name) {
+        mus_loop.loop = true;
+        mus_loop.clip = (AudioClip) Resources.Load("SFX/" + sfx_name);
+        mus_loop.volume = volume;
+        mus_loop.Play();
+    }
+
+    public float getVolume() {
+        return volume;
     }
 
     /// <summary>
